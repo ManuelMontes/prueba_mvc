@@ -1,3 +1,11 @@
+<?php
+if ((isset($_POST['nombre'])) && ($_POST['nombre'] != '') && (isset($_POST['precio'])) && ($_POST['precio'] != '')) {
+
+    include "models/modelo.php";
+    $nuevo = new Service();
+    $asd = $nuevo->setServicio($_POST['nombre'], $_POST['precio']);
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,7 +43,7 @@
 
 function v(){
     $.ajax({
-       url: 'Controllers/usuarios_controller.php',
+       url: '../Controllers/UsuariosController.php',
        //url: '../hola.php'
        type: "POST",
        data: {
@@ -67,7 +75,7 @@ function v(){
 
 $(document).ready(function(){
     $.ajax({
-       url: 'Controllers/usuarios_controller.php',
+       url: 'Controllers/UsuariosController.php',
        //url: '../hola.php'
        type: "POST",
        data: {
