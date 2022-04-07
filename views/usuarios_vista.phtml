@@ -1,11 +1,3 @@
-<?php
-if ((isset($_POST['nombre'])) && ($_POST['nombre'] != '') && (isset($_POST['precio'])) && ($_POST['precio'] != '')) {
-
-    include "models/modelo.php";
-    $nuevo = new Service();
-    $asd = $nuevo->setServicio($_POST['nombre'], $_POST['precio']);
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,6 +6,7 @@ if ((isset($_POST['nombre'])) && ($_POST['nombre'] != '') && (isset($_POST['prec
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script> 
     <title>listar Usuarios</title>
 </head>
 <body>
@@ -41,45 +34,57 @@ if ((isset($_POST['nombre'])) && ($_POST['nombre'] != '') && (isset($_POST['prec
     </div>
 	<script>
 
-function v(){
-    $.ajax({
-       url: '../Controllers/UsuariosController.php',
-       //url: '../hola.php'
-       type: "POST",
-       data: {
-           'c' : 'Consultar'
-     },
-     //dataType: "JSON",
-       success: function(data) {
-         console.log(data);//alert(data);
-         /*var html = '';
-         var i;
-         for (i = 0; i < data.length; i++) {
-           html += '<tr>' +
-             '<td>' + data[i].idUsuario + '</td>' +
-             '<td>' + data[i].nombreUsuario + '</td>' +
-             '<td>' + data[i].apellidoPaternoUsuario + '</td>' +
-             '<td>' + data[i].apellidoMaternoUsuario + '</td>' +
-             '<td>' + data[i].edadUsuario + '</td>' +
-             '</tr>';
-         }
-         $('#DataResult').html(html);*/
-       },
-       error: function(jqXHR, textStatus, errorThrown) {
-         alert('Error...');
-       }
-     });
 
+function readRecords() {
+    $.get("ajax/readRecord.php", {}, function (data, status) {
+        $("#DataResult").html(data);
+    });
 }
+$(document).ready(function () {
+    // READ recods on page load
+    readRecords(); // calling function
+});
 
 
-$(document).ready(function(){
+function v(){
+  
     $.ajax({
-       url: 'Controllers/UsuariosController.php',
-       //url: '../hola.php'
+        //url: 'core/ControladorFrontal.func.php', // get the route value
+        //url: 'Controllers/UsuariosController.php', // get the route value
+        url: 'index.php', // get the route value
+        type: 'POST', //we are using POST method to submit the data to the server side
+        dataType: 'json',
+	    data: { 'controller' : 'R'} , // our serialized array data for server side
+	        success: function (data) {//once the request successfully process to the server side it will return result here
+                json.parse(data);
+                console.log(data + 'd');//alert(data);
+                var html = '';
+                var i;
+         for (i = 0; i < data.length; i++) {
+           html += '<tr>' +
+             '<td>' + data[i].idUsuario + '</td>' +
+             '<td>' + data[i].nombreUsuario + '</td>' +
+             '<td>' + data[i].apellidoPaternoUsuario + '</td>' +
+             '<td>' + data[i].apellidoMaternoUsuario + '</td>' +
+             '<td>' + data[i].edadUsuario + '</td>' +
+             '</tr>';
+         }
+         $('#DataResult').html(html);
+	        },
+	        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log('Error...');
+	        }
+	    });
+    }
+
+
+/*$(document).ready(function(){
+    $.ajax({
+       //url: 'Controllers/UsuariosController.php',
+       url: 'index.php'
        type: "POST",
        data: {
-           'c' : 'Consultar'
+           'controller' : 'Consultar'
      },
      //dataType: "JSON",
        success: function(data) {
@@ -96,12 +101,12 @@ $(document).ready(function(){
              '</tr>';
          }
          $('#DataResult').html(html);*/
-       },
+       /*},
        error: function(jqXHR, textStatus, errorThrown) {
          alert('Error...');
        }
      });
-})
+})*/
     </script>
 </body>
 </html>
